@@ -1,0 +1,18 @@
+1- t = 0.087, p = 0.933
+The difference between the math and speech groups is tiny (t ≈ 0) and completely consistent with random variation (p ≫ 0.05).
+
+2- Stress was operationalized as change in Negative Affect; therefore, group differences were tested using ΔNA only.
+
+3- The t-value tells you:
+“How different are the average stress changes between the two groups, relative to the noise in the data?”
+
+The math and speech groups showed almost identical changes in Negative Affect, and any tiny difference observed is completely consistent with random variation.
+
+4- This code reshapes the data into long format, labels each score by time and affect type, and fits a mixed-effects model that tests whether stress (Negative Affect) changes differently over time in the math versus speech group while accounting for repeated measurements within participants.
+
+5- Cohen’s d expresses the difference in stress change between math and speech in standard deviation units; here, d = −0.06 indicates a negligible, practically nonexistent effect.
+
+6- Line plot
+Figure 1. Mean Negative Affect scores before and after the task for the math and speech conditions. Error bars represent ±1 standard error. Both groups showed comparable increases in Negative Affect over time.
+Boxplot
+Figure 2. Distribution of change in Negative Affect (ΔNA = Post − Pre) by condition. No significant difference in stress-related change was observed between groups.
