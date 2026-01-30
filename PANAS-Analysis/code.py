@@ -121,24 +121,8 @@ print(
     stats.ttest_ind(math["NApre"], speech["NApre"], equal_var=False, nan_policy="omit")
 )
 
-
 # ==================================================
-# 7. CHANGE SCORE ANALYSES
-# ==================================================
-
-print(
-    "ΔNA Group Difference:",
-    stats.ttest_ind(math["ΔNA"], speech["ΔNA"], equal_var=False, nan_policy="omit")
-)
-
-print(
-    "ΔPA Group Difference:",
-    stats.ttest_ind(math["ΔPA"], speech["ΔPA"], equal_var=False, nan_policy="omit")
-)
-
-
-# ==================================================
-# 8. MIXED-EFFECTS MODELS
+# 7. MIXED-EFFECTS MODELS
 # ==================================================
 
 df_long = pd.melt(
@@ -170,7 +154,7 @@ print(
 
 
 # ==================================================
-# 9. EFFECT SIZES
+# 8. EFFECT SIZES
 # ==================================================
 
 def cohens_d(x, y):
@@ -185,10 +169,10 @@ print("Cohen’s d (ΔPA):", cohens_d(math["ΔPA"].dropna(), speech["ΔPA"].drop
 
 
 # ==================================================
-# 10. PLOTS
+# 9. PLOTS
 # ==================================================
 
-def plot_pre_post(long_df, ylabel, title):
+def plot_pre_post(long_df, ylabel, title, filename):
     summary = (
         long_df
         .groupby(["Group", "Time"], observed=True)["Score"]
@@ -223,20 +207,21 @@ def plot_pre_post(long_df, ylabel, title):
     ax.set_title(title)
     ax.legend(title="Condition")
 
+    # ✅ SAVE FIGURE
+    plt.savefig(filename, dpi=300, bbox_inches="tight")
     plt.show()
 
 
-plot_pre_post(na_long, "Negative Affect", "Negative Affect Pre–Post by Condition")
-plot_pre_post(pa_long, "Positive Affect", "Positive Affect Pre–Post by Condition")
+plot_pre_post(na_long, 
+              "Negative Affect", 
+              "Negative Affect Pre–Post by Condition", 
+              "./PANAS-Analysis/fig_NA_pre_post.png")
 
-plt.boxplot([math["ΔNA"].dropna(), speech["ΔNA"].dropna()],
-            tick_labels=["Math", "Speech"])
-plt.ylabel("ΔNA (Post − Pre)")
-plt.title("Change in Negative Affect")
-plt.show()
+plot_pre_post(pa_long, 
+              "Positive Affect", 
+              "Positive Affect Pre–Post by Condition", 
+              "./PANAS-Analysis/fig_PA_pre_post.png")
 
-plt.boxplot([math["ΔPA"].dropna(), speech["ΔPA"].dropna()],
-            tick_labels=["Math", "Speech"])
-plt.ylabel("ΔPA (Post − Pre)")
-plt.title("Change in Positive Affect")
-plt.show()
+# ==================================================
+# END OF SCRIPT
+# ==================================================
