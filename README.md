@@ -10,7 +10,7 @@ DigitalHealthPsychology/
 │   ├── ECG_HRV_Analysis.py             
 │   ├── ECG_scaling_artifactRemoval.py  
 ├── PANAS-Analysis/                     # PANAS analysis 
-│   ├── code.py                         # Main analysis script
+│   ├── PANAS_Analysis.py                         # Main analysis script
 │   ├── data_project_*.csv              # Raw dataset           
 ├── README.md                       
 ```
