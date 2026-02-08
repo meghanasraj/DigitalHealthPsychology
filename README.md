@@ -1,7 +1,5 @@
 # Digital Health Psychology Project
 
----
-
 ## Project Structure
 
 ```
