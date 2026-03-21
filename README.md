@@ -10,9 +10,18 @@ DigitalHealthPsychology/
 │   ├── ECG_HRV_Analysis.py             
 │   ├── ECG_scaling_artifactRemoval.py  
 ├── PANAS-Analysis/                     # PANAS analysis 
-│   ├── PANAS_Analysis.py                         # Main analysis script
-│   ├── data_project_*.csv              # Raw dataset           
-├── README.md                       
+│   ├── PANAS_Analysis.py               # Main analysis script
+│   ├── data/                           # Raw dataset 
+│   │   └── data_project_*.csv
+│   ├── processed/                      # Cleaned & scored datasets
+│   │   ├── panas_scored_wide_pre_post.csv
+│   │   └── panas_long_format_for_mixed_models.csv
+│   ├── figures/                        # Generated plots
+│   │   ├── na_pre_post_by_condition.png
+│   │   └── pa_pre_post_by_condition.png
+│
+├── README.md                                              
+                      
 ```
 
 ---
@@ -67,15 +76,23 @@ PANAS subscales are scored according to standard guidelines:
 
 Scores are computed separately for:
 
-* PApre, NApre
-* PApost, NApost
+* PA_pre, NA_pre
+* PA_post, NA_post
 
 Change scores are calculated as:
 
-* ΔPA = PApost − PApre
-* ΔNA = NApost − NApre
+* ΔPA = PA_post − PA_pre
+* ΔNA = NA_post − NA_pre
 
-The final scored dataset is saved as `scored_PANAS.csv`.
+---
+
+### Output Files
+
+Processed datasets are saved to:
+
+* `processed/panas_scored_wide_pre_post.csv` → Wide-format dataset (one row per participant)
+
+* `processed/panas_long_format_for_mixed_models.csv` → Long-format dataset (for statistical modeling)
 
 ---
 
@@ -83,12 +100,12 @@ The final scored dataset is saved as `scored_PANAS.csv`.
 
 Independent-samples t-tests (Welch correction) are conducted to verify that groups do **not differ at baseline** on:
 
-* Positive Affect (PApre)
-* Negative Affect (NApre)
+* Positive Affect (PA_pre)
+* Negative Affect (NA_pre)
 
 ---
 
-### Statistical Modeling
+### Mixed-Effects Models
 
 To analyze intervention effects, **linear mixed-effects models** are fitted separately for PA and NA:
 
@@ -113,10 +130,10 @@ Pre–post changes are visualized using line plots with:
 * Group-wise means
 * Standard error of the mean (SEM) as error bars
 
-Generated figures:
+Generated figures (saved in `figures/`):
 
-* `fig_NA_pre_post.png`
-* `fig_PA_pre_post.png`
+* `na_pre_post_by_condition.png`
+* `pa_pre_post_by_condition.png`
 
 ---
 
@@ -136,4 +153,6 @@ All outputs (CSV files, model summaries, and figures) will be generated automati
 
 ## Notes
 
-* File paths are relative; run the script from the project root.
+* All File paths are relative
+* Run the script from the project root
+* Output folders are created automatically

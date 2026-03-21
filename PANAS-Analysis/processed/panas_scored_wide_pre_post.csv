@@ -1,0 +1,12 @@
+ID,Group,PA_pre,NA_pre,PA_post,NA_post,ΔPA,ΔNA
+SP28S,speech,27,10,23,12,-4,2
+SP15K,math,34,13,34,15,0,2
+SS14I,speech,42,14,48,11,6,-3
+SM18N,math,39,11,36,15,-3,4
+RS17N,speech,26,12,24,28,-2,16
+NC15E,math,40,14,42,13,2,-1
+SM04F,speech,38,16,39,15,1,-1
+SH16R,math,27,12,25,11,-2,-1
+ED03K,speech,27,13,20,12,-7,-1
+CB17R,math,18,21,19,27,1,6
+LN07E,speech,27,10,22,11,-5,1

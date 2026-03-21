@@ -3,13 +3,20 @@ import numpy as np
 from scipy import stats
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
-
+import os
 
 # ==================================================
-# 1. LOAD DATA
+# 1. CREATE OUTPUT DIRECTORIES
 # ==================================================
 
-FILE_PATH = "./PANAS-Analysis/data_project_1119684_2026_01_12.csv"
+os.makedirs("./PANAS-Analysis/figures", exist_ok=True)
+os.makedirs("./PANAS-Analysis/processed", exist_ok=True)
+
+# ==================================================
+# 2. LOAD DATA
+# ==================================================
+
+FILE_PATH = "./PANAS-Analysis/data/data_project_1119684_2026_01_12.csv"
 
 df_raw = pd.read_csv(
     FILE_PATH,
@@ -24,7 +31,7 @@ GROUP_COL = "Condition"
 
 
 # ==================================================
-# 2. PANAS ITEM DEFINITIONS
+# 3. PANAS ITEM DEFINITIONS
 # ==================================================
 
 PA_ITEMS = [
@@ -39,7 +46,7 @@ NA_ITEMS = [
 
 
 # ==================================================
-# 3. IDENTIFY PRE / POST COLUMNS
+# 4. IDENTIFY PRE / POST COLUMNS
 # ==================================================
 
 PA_PRE_COLS  = [c for c in df_raw.columns if c in PA_ITEMS and not c.endswith(".1")]
@@ -52,7 +59,7 @@ assert len(PA_POST_COLS) == len(NA_POST_COLS) == 10
 
 
 # ==================================================
-# 4. DATA CLEANING & SCORING FUNCTIONS
+# 5. DATA CLEANING & SCORING FUNCTIONS
 # ==================================================
 
 def range_check(df, cols):
@@ -82,7 +89,7 @@ def score_subscale(df, cols):
 
 
 # ==================================================
-# 5. SCORE PANAS
+# 6. SCORE PANAS
 # ==================================================
 
 df = df_raw.copy()
@@ -92,20 +99,20 @@ df = range_check(df, PA_POST_COLS + NA_POST_COLS)
 df_scores = pd.DataFrame({
     "ID": df[ID_COL],
     "Group": df[GROUP_COL].astype("category"),
-    "PApre":  score_subscale(df, PA_PRE_COLS),
-    "NApre":  score_subscale(df, NA_PRE_COLS),
-    "PApost": score_subscale(df, PA_POST_COLS),
-    "NApost": score_subscale(df, NA_POST_COLS),
+    "PA_pre":  score_subscale(df, PA_PRE_COLS),
+    "NA_pre":  score_subscale(df, NA_PRE_COLS),
+    "PA_post": score_subscale(df, PA_POST_COLS),
+    "NA_post": score_subscale(df, NA_POST_COLS),
 })
 
-df_scores["ΔPA"] = df_scores["PApost"] - df_scores["PApre"]
-df_scores["ΔNA"] = df_scores["NApost"] - df_scores["NApre"]
+df_scores["ΔPA"] = df_scores["PA_post"] - df_scores["PA_pre"]
+df_scores["ΔNA"] = df_scores["NA_post"] - df_scores["NA_pre"]
 
-df_scores.to_csv("./PANAS-Analysis/scored_PANAS.csv", index=False)
+df_scores.to_csv("./PANAS-Analysis/processed/panas_scored_wide_pre_post.csv", index=False)
 
 
 # ==================================================
-# 6. BASELINE EQUIVALENCE
+# 7. BASELINE EQUIVALENCE
 # ==================================================
 
 math   = df_scores[df_scores["Group"] == "math"]
@@ -113,30 +120,30 @@ speech = df_scores[df_scores["Group"] == "speech"]
 
 print(
     "Baseline PA:",
-    stats.ttest_ind(math["PApre"], speech["PApre"], equal_var=False, nan_policy="omit")
+    stats.ttest_ind(math["PA_pre"], speech["PA_pre"], equal_var=False, nan_policy="omit")
 )
 
 print(
     "Baseline NA:",
-    stats.ttest_ind(math["NApre"], speech["NApre"], equal_var=False, nan_policy="omit")
+    stats.ttest_ind(math["NA_pre"], speech["NA_pre"], equal_var=False, nan_policy="omit")
 )
 
 # ==================================================
-# 7. MIXED-EFFECTS MODELS
+# 8. MIXED-EFFECTS MODELS
 # ==================================================
 
 df_long = pd.melt(
     df_scores,
     id_vars=["ID", "Group"],
-    value_vars=["PApre", "PApost", "NApre", "NApost"],
+    value_vars=["PA_pre", "PA_post", "NA_pre", "NA_post"],
     var_name="Measure",
     value_name="Score"
 )
 
-df_long["Time"]   = np.where(df_long["Measure"].str.contains("pre"), "Pre", "Post")
-df_long["Affect"] = np.where(df_long["Measure"].str.contains("PA"), "PA", "NA")
+df_long["Time"]   = df_long["Measure"].str.split("_").str[1].str.capitalize()
+df_long["Affect"] = df_long["Measure"].str.split("_").str[0]
 
-df_long.to_csv("./PANAS-Analysis/df_long_data.csv", index=False)
+df_long.to_csv("./PANAS-Analysis/processed/panas_long_format_for_mixed_models.csv", index=False)
 
 # Negative Affect
 na_long = df_long[df_long["Affect"] == "NA"].dropna()
@@ -154,7 +161,7 @@ print(
 
 
 # ==================================================
-# 8. EFFECT SIZES
+# 9. EFFECT SIZES
 # ==================================================
 
 def cohens_d(x, y):
@@ -169,7 +176,7 @@ print("Cohen’s d (ΔPA):", cohens_d(math["ΔPA"].dropna(), speech["ΔPA"].drop
 
 
 # ==================================================
-# 9. PLOTS
+# 10. PLOTS
 # ==================================================
 
 def plot_pre_post(long_df, ylabel, title, filename):
@@ -215,12 +222,12 @@ def plot_pre_post(long_df, ylabel, title, filename):
 plot_pre_post(na_long, 
               "Negative Affect", 
               "Negative Affect Pre–Post by Condition", 
-              "./PANAS-Analysis/fig_NA_pre_post.png")
+              "./PANAS-Analysis/figures/na_pre_post_by_condition.png")
 
 plot_pre_post(pa_long, 
               "Positive Affect", 
               "Positive Affect Pre–Post by Condition", 
-              "./PANAS-Analysis/fig_PA_pre_post.png")
+              "./PANAS-Analysis/figures/pa_pre_post_by_condition.png")
 
 # ==================================================
 # END OF SCRIPT
