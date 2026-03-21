@@ -230,5 +230,19 @@ plot_pre_post(pa_long,
               "./PANAS-Analysis/figures/pa_pre_post_by_condition.png")
 
 # ==================================================
+# 11. DESCRIPTIVE STATISTICS FOR TABLE
+# ==================================================
+
+desc = (
+    df_scores
+    .groupby("Group")[["PA_pre", "PA_post", "NA_pre", "NA_post"]]
+    .agg(["mean", "std"])
+    .round(2)
+)
+
+print("\nDescriptive statistics (PANAS):")
+print(desc)
+
+# ==================================================
 # END OF SCRIPT
 # ==================================================
