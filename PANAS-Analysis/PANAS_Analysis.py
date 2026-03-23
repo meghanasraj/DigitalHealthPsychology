@@ -16,7 +16,7 @@ os.makedirs("./PANAS-Analysis/processed", exist_ok=True)
 # 2. LOAD DATA
 # ==================================================
 
-FILE_PATH = "./PANAS-Analysis/data/data_project_1119684_2026_01_12.csv"
+FILE_PATH = "./PANAS-Analysis/data/panas_raw_data.csv"
 
 df_raw = pd.read_csv(
     FILE_PATH,

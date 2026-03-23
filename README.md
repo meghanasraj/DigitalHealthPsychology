@@ -12,7 +12,7 @@ DigitalHealthPsychology/
 ├── PANAS-Analysis/                     # PANAS analysis 
 │   ├── PANAS_Analysis.py               # Main analysis script
 │   ├── data/                           # Raw dataset 
-│   │   └── data_project_*.csv
+│   │   └── panas_raw_data.csv
 │   ├── processed/                      # Cleaned & scored datasets
 │   │   ├── panas_scored_wide_pre_post.csv
 │   │   └── panas_long_format_for_mixed_models.csv
