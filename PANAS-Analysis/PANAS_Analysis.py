@@ -185,7 +185,7 @@ print("Cohen’s d (ΔPA):", cohens_d(math["ΔPA"].dropna(), speech["ΔPA"].drop
 # 10. PLOTS
 # ==================================================
 
-def plot_pre_post(long_df, ylabel, title, filename):
+def plot_pre_post(long_df, ylabel, filename):
     summary = (
         long_df
         .groupby(["Group", "Time"], observed=True)["Score"]
@@ -202,7 +202,13 @@ def plot_pre_post(long_df, ylabel, title, filename):
 
     summary = summary.sort_values("Time")
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6, 4), facecolor="white")
+
+    # APA-style lines (black & gray, different markers/linestyles)
+    styles = {
+        "math":   dict(color="black", marker="o", linestyle="-"),
+        "speech": dict(color="gray",  marker="s", linestyle="--")
+    }
 
     for g in summary["Group"].unique():
         d = summary[summary["Group"] == g]
@@ -210,15 +216,24 @@ def plot_pre_post(long_df, ylabel, title, filename):
             d["Time"],
             d["mean"],
             yerr=d["sem"],
-            marker="o",
             capsize=4,
-            label=g
+            label=g,
+            **styles.get(g, {})
         )
-
+    # Labels (keep, APA)
     ax.set_xlabel("Time")
     ax.set_ylabel(ylabel)
-    ax.set_title(title)
-    ax.legend(title="Condition")
+    
+    # Clean look (APA)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.grid(False)
+
+    # Legend (no title)
+    ax.legend(frameon=False)
+
+    # Save
+    plt.tight_layout()
 
     # ✅ SAVE FIGURE
     plt.savefig(filename, dpi=300, bbox_inches="tight")
@@ -226,13 +241,11 @@ def plot_pre_post(long_df, ylabel, title, filename):
 
 
 plot_pre_post(na_long, 
-              "Negative Affect", 
-              "Negative Affect Pre–Post by Condition", 
+              "Negative Affect",
               FIG_DIR / "na_pre_post_by_condition.png")
 
 plot_pre_post(pa_long, 
               "Positive Affect", 
-              "Positive Affect Pre–Post by Condition", 
               FIG_DIR / "pa_pre_post_by_condition.png")
 
 # ==================================================
