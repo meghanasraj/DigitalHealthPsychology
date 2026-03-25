@@ -220,6 +220,7 @@ def plot_pre_post(long_df, ylabel, filename):
             label=g,
             **styles.get(g, {})
         )
+        
     # Labels (keep, APA)
     ax.set_xlabel("Time")
     ax.set_ylabel(ylabel)
