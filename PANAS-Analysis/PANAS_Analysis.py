@@ -4,19 +4,24 @@ from scipy import stats
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 import os
+from pathlib import Path
 
 # ==================================================
 # 1. CREATE OUTPUT DIRECTORIES
 # ==================================================
+BASE_DIR = Path(__file__).resolve().parent
 
-os.makedirs("./PANAS-Analysis/figures", exist_ok=True)
-os.makedirs("./PANAS-Analysis/processed", exist_ok=True)
+FIG_DIR = BASE_DIR / "figures"
+PROC_DIR = BASE_DIR / "processed"
+
+FIG_DIR.mkdir(exist_ok=True)
+PROC_DIR.mkdir(exist_ok=True)
 
 # ==================================================
 # 2. LOAD DATA
 # ==================================================
 
-FILE_PATH = "./PANAS-Analysis/data/panas_raw_data.csv"
+FILE_PATH = BASE_DIR / "data" / "panas_raw_data.csv"
 
 df_raw = pd.read_csv(
     FILE_PATH,
@@ -108,7 +113,7 @@ df_scores = pd.DataFrame({
 df_scores["ΔPA"] = df_scores["PA_post"] - df_scores["PA_pre"]
 df_scores["ΔNA"] = df_scores["NA_post"] - df_scores["NA_pre"]
 
-df_scores.to_csv("./PANAS-Analysis/processed/panas_scored_wide_pre_post.csv", index=False)
+df_scores.to_csv(PROC_DIR / "panas_scored_wide_pre_post.csv", index=False)
 
 
 # ==================================================
@@ -143,7 +148,7 @@ df_long = pd.melt(
 df_long["Time"]   = df_long["Measure"].str.split("_").str[1].str.capitalize()
 df_long["Affect"] = df_long["Measure"].str.split("_").str[0]
 
-df_long.to_csv("./PANAS-Analysis/processed/panas_long_format_for_mixed_models.csv", index=False)
+df_long.to_csv(PROC_DIR / "panas_long_format_for_mixed_models.csv", index=False)
 
 # Negative Affect
 na_long = df_long[df_long["Affect"] == "NA"].dropna()
@@ -222,12 +227,12 @@ def plot_pre_post(long_df, ylabel, title, filename):
 plot_pre_post(na_long, 
               "Negative Affect", 
               "Negative Affect Pre–Post by Condition", 
-              "./PANAS-Analysis/figures/na_pre_post_by_condition.png")
+              FIG_DIR / "na_pre_post_by_condition.png")
 
 plot_pre_post(pa_long, 
               "Positive Affect", 
               "Positive Affect Pre–Post by Condition", 
-              "./PANAS-Analysis/figures/pa_pre_post_by_condition.png")
+              FIG_DIR / "pa_pre_post_by_condition.png")
 
 # ==================================================
 # 11. DESCRIPTIVE STATISTICS FOR TABLE
@@ -235,7 +240,7 @@ plot_pre_post(pa_long,
 
 desc = (
     df_scores
-    .groupby("Group")[["PA_pre", "PA_post", "NA_pre", "NA_post"]]
+    .groupby("Group", observed=True)[["PA_pre", "PA_post", "NA_pre", "NA_post"]]
     .agg(["mean", "std"])
     .round(2)
 )

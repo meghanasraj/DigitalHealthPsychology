@@ -140,7 +140,8 @@ Generated figures (saved in `figures/`):
 ### How to Run the PANAS Analysis
 
 ```bash
-python PANAS-Analysis/PANAS_Analysis.py
+cd PANAS-Analysis
+python PANAS_Analysis.py
 ```
 
 All outputs (CSV files, model summaries, and figures) will be generated automatically.
