@@ -18,6 +18,7 @@ PROC_DIR = BASE_DIR / "processed"
 FIG_DIR.mkdir(exist_ok=True)
 PROC_DIR.mkdir(exist_ok=True)
 
+
 # ==================================================
 # 2. LOAD DATA
 # ==================================================
@@ -116,6 +117,7 @@ df_scores["ΔNA"] = df_scores["NA_post"] - df_scores["NA_pre"]
 
 df_scores.to_csv(PROC_DIR / "panas_scored_wide_pre_post.csv", index=False)
 
+
 # ==================================================
 # 7. DESCRIPTIVE STATISTICS FOR TABLE
 # ==================================================
@@ -129,6 +131,7 @@ desc = (
 
 print("\nDescriptive statistics (PANAS):")
 print(desc)
+
 
 # ==================================================
 # 8. BASELINE EQUIVALENCE
@@ -146,6 +149,7 @@ print(
     "Baseline NA:",
     stats.ttest_ind(math["NA_pre"], speech["NA_pre"], equal_var=False, nan_policy="omit")
 )
+
 
 # ==================================================
 # 9. MIXED-EFFECTS MODELS
