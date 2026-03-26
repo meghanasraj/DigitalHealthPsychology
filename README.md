@@ -165,7 +165,7 @@ All outputs (CSV files, model summaries, and figures) will be generated automati
 ---
 
 ## Part 2: ECG-Analysis
-
+---
 
 # 🫀 ECG, HRV & Stress Analysis Pipeline (NilsPod)
 
@@ -181,8 +181,6 @@ A complete pipeline for processing **NilsPod ECG + IMU data** to extract:
 * 😰 HRV-derived stress scores
 
 Includes statistical analysis and visualization for comparing experimental conditions (e.g., **speech vs math stress tasks**).
-
----
 ---
 
 ## 📄 Input Data
