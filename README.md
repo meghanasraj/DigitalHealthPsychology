@@ -166,7 +166,175 @@ All outputs (CSV files, model summaries, and figures) will be generated automati
 
 ## Part 2: ECG-Analysis
 
+
+# 🫀 ECG, HRV & Stress Analysis Pipeline (NilsPod)
+
+![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
+![Status](https://img.shields.io/badge/status-active-success)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+A complete pipeline for processing **NilsPod ECG + IMU data** to extract:
+
+* ❤️ Heart Rate (HR)
+* 📉 Heart Rate Variability (HRV)
+* 🚶 Motion artifacts (IMU-based)
+* 😰 HRV-derived stress scores
+
+Includes statistical analysis and visualization for comparing experimental conditions (e.g., **speech vs math stress tasks**).
+
 ---
+---
+
+## 📄 Input Data
+
+### 1. NilsPod `.bin` files
+
+Place all `.bin` files in the project directory (or update `DATA_DIR`).
+
+### 2. Participant Metadata File
+
+`Participant Data-2.xlsx` must include:
+
+| Column      | Description                                     |
+| ----------- | ----------------------------------------------- |
+| `VP_ID`     | Participant ID                                  |
+| `condition` | Experimental condition (e.g., `speech`, `math`) |
+| `Bin file`  | Corresponding `.bin` filename                   |
+
+---
+
+## 🧠 Processing Pipeline
+
+### 🔹 ECG Processing
+
+* Signal cleaning
+* R-peak detection
+* Heart rate estimation
+
+### 🔹 Signal Conditioning
+
+* Warm-up removal (default: 4 seconds)
+* Baseline drift removal
+* Signal normalization
+
+### 🔹 Motion Artifact Detection
+
+* Based on IMU (acc + gyro)
+* Rolling standard deviation
+* Threshold-based detection
+* Removes contaminated R-peaks
+
+### 🔹 HRV Metrics
+
+| Metric          | Description                        |
+| --------------- | ---------------------------------- |
+| Mean HR         | Average heart rate (bpm)           |
+| Max Increase HR | Peak HR change                     |
+| SDNN            | Standard deviation of RR intervals |
+| RMSSD           | Short-term HRV                     |
+| Stress Score    | Derived from RMSSD                 |
+
+---
+
+## 😰 Stress Score Model
+
+A simple HRV-based stress proxy:
+
+* RMSSD ↓ → Stress ↑
+* Scaled to **0–100 range**
+
+```text
+Low RMSSD (~10 ms)  → High stress (~100)
+High RMSSD (~100 ms) → Low stress (~0)
+```
+
+> ⚠️ This is a heuristic model, not a clinical metric.
+
+---
+
+## 📊 Output
+
+### 1. CSV File
+
+```
+HR_HRV_stress_summary_by_participant.csv
+```
+
+Contains:
+
+* HR metrics
+* HRV metrics
+* Stress scores
+* Condition labels
+
+---
+
+### 2. Statistical Analysis
+
+ANOVA tests:
+
+```text
+max_increase_HR ~ condition
+SDNN_ms ~ condition
+RMSSD_ms ~ condition
+Stress_Score ~ condition
+```
+
+---
+
+### 3. Visualizations
+
+* 📊 Bar plots (mean ± SD)
+
+  * Mean HR
+  * Max HR increase
+  * SDNN
+  * RMSSD
+  * Stress score
+
+* 📉 Scatter plot:
+
+  * RMSSD vs Stress Score
+  * Demonstrates HRV–stress relationship
+
+---
+
+## 🔧 Configuration
+
+Modify parameters in the script:
+
+```python
+DATA_DIR = "."
+WARMUP_S = 4.0
+FORCE_ECG_UP = True
+```
+
+Motion detection:
+
+```python
+window_s = 0.5
+acc_factor = 2.0
+gyr_factor = 2.0
+```
+
+---
+
+## ⚠️ Limitations
+
+* Requires sufficient R-peaks for HRV calculation
+* Motion detection is threshold-based (not ML-based)
+* Stress score is simplified (RMSSD only)
+* No frequency-domain HRV (LF/HF)
+
+---
+
+## 🙌 Acknowledgments
+
+* [`biopsykit`](https://github.com/mad-lab-fau/biopsykit)
+* Scientific Python ecosystem (NumPy, SciPy, Statsmodels)
+
+---
+
 
 ## Notes
 
