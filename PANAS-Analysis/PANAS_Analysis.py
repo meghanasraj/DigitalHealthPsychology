@@ -210,7 +210,7 @@ def plot_pre_post(long_df, ylabel, filename):
         .reset_index()
     )
 
-    # 🔹 Force correct left-to-right order
+    # Force correct left-to-right order
     summary["Time"] = pd.Categorical(
         summary["Time"],
         categories=["Pre", "Post"],
@@ -253,7 +253,7 @@ def plot_pre_post(long_df, ylabel, filename):
     # Save
     plt.tight_layout()
 
-    # ✅ SAVE FIGURE
+    # SAVE FIGURE
     plt.savefig(filename, dpi=300, bbox_inches="tight")
     plt.show()
 
