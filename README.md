@@ -96,15 +96,6 @@ Processed datasets are saved to:
 
 ---
 
-### Baseline Equivalence
-
-Independent-samples t-tests (Welch correction) are conducted to verify that groups do **not differ at baseline** on:
-
-* Positive Affect (PA_pre)
-* Negative Affect (NA_pre)
-
----
-
 ### Descriptive Statistics
 
 Descriptive statistics are computed for each group and time point, including:
@@ -118,6 +109,15 @@ Variables summarized:
 * Negative Affect (NA_pre, NA_post)
 
 These statistics provide an overview of the data distribution.
+
+---
+
+### Baseline Equivalence
+
+Independent-samples t-tests (Welch correction) are conducted to verify that groups do **not differ at baseline** on:
+
+* Positive Affect (PA_pre)
+* Negative Affect (NA_pre)
 
 ---
 

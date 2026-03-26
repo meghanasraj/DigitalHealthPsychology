@@ -116,9 +116,22 @@ df_scores["ΔNA"] = df_scores["NA_post"] - df_scores["NA_pre"]
 
 df_scores.to_csv(PROC_DIR / "panas_scored_wide_pre_post.csv", index=False)
 
+# ==================================================
+# 7. DESCRIPTIVE STATISTICS FOR TABLE
+# ==================================================
+
+desc = (
+    df_scores
+    .groupby("Group", observed=True)[["PA_pre", "PA_post", "NA_pre", "NA_post"]]
+    .agg(["mean", "std"])
+    .round(2)
+)
+
+print("\nDescriptive statistics (PANAS):")
+print(desc)
 
 # ==================================================
-# 7. BASELINE EQUIVALENCE
+# 8. BASELINE EQUIVALENCE
 # ==================================================
 
 math   = df_scores[df_scores["Group"] == "math"]
@@ -135,7 +148,7 @@ print(
 )
 
 # ==================================================
-# 8. MIXED-EFFECTS MODELS
+# 9. MIXED-EFFECTS MODELS
 # ==================================================
 
 df_long = pd.melt(
@@ -167,7 +180,7 @@ print(
 
 
 # ==================================================
-# 9. EFFECT SIZES
+# 10. EFFECT SIZES
 # ==================================================
 
 def cohens_d(x, y):
@@ -182,7 +195,7 @@ print("Cohen’s d (ΔPA):", cohens_d(math["ΔPA"].dropna(), speech["ΔPA"].drop
 
 
 # ==================================================
-# 10. PLOTS
+# 11. PLOTS
 # ==================================================
 
 def plot_pre_post(long_df, ylabel, filename):
@@ -248,20 +261,6 @@ plot_pre_post(na_long,
 plot_pre_post(pa_long, 
               "Positive Affect", 
               FIG_DIR / "pa_pre_post_by_condition.png")
-
-# ==================================================
-# 11. DESCRIPTIVE STATISTICS FOR TABLE
-# ==================================================
-
-desc = (
-    df_scores
-    .groupby("Group", observed=True)[["PA_pre", "PA_post", "NA_pre", "NA_post"]]
-    .agg(["mean", "std"])
-    .round(2)
-)
-
-print("\nDescriptive statistics (PANAS):")
-print(desc)
 
 # ==================================================
 # END OF SCRIPT
