@@ -105,6 +105,22 @@ Independent-samples t-tests (Welch correction) are conducted to verify that grou
 
 ---
 
+### Descriptive Statistics
+
+Descriptive statistics are computed for each group and time point, including:
+
+* Mean (M)
+* Standard deviation (SD)
+
+Variables summarized:
+
+* Positive Affect (PA_pre, PA_post)
+* Negative Affect (NA_pre, NA_post)
+
+These statistics provide an overview of the data distribution.
+
+---
+
 ### Mixed-Effects Models
 
 To analyze intervention effects, **linear mixed-effects models** are fitted separately for PA and NA:
