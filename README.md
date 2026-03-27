@@ -165,9 +165,8 @@ All outputs (CSV files, model summaries, and figures) will be generated automati
 ---
 
 ## Part 2: ECG-Analysis
----
 
-# 🫀 ECG, HRV & Stress Analysis Pipeline (NilsPod)
+### ECG, HRV & Stress Analysis Pipeline (NilsPod)
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
 ![Status](https://img.shields.io/badge/status-active-success)
@@ -175,21 +174,22 @@ All outputs (CSV files, model summaries, and figures) will be generated automati
 
 A complete pipeline for processing **NilsPod ECG + IMU data** to extract:
 
-* ❤️ Heart Rate (HR)
-* 📉 Heart Rate Variability (HRV)
-* 🚶 Motion artifacts (IMU-based)
-* 😰 HRV-derived stress scores
+* Heart Rate (HR)
+* Heart Rate Variability (HRV)
+* Motion artifacts (IMU-based)
+* HRV-derived stress scores
 
 Includes statistical analysis and visualization for comparing experimental conditions (e.g., **speech vs math stress tasks**).
+
 ---
 
-## 📄 Input Data
+### Input Data
 
-### 1. NilsPod `.bin` files
+#### 1. NilsPod `.bin` files
 
 Place all `.bin` files in the project directory (or update `DATA_DIR`).
 
-### 2. Participant Metadata File
+#### 2. Participant Metadata File
 
 `Participant Data-2.xlsx` must include:
 
@@ -201,28 +201,28 @@ Place all `.bin` files in the project directory (or update `DATA_DIR`).
 
 ---
 
-## 🧠 Processing Pipeline
+### Processing Pipeline
 
-### 🔹 ECG Processing
+#### ECG Processing
 
 * Signal cleaning
 * R-peak detection
 * Heart rate estimation
 
-### 🔹 Signal Conditioning
+#### Signal Conditioning
 
 * Warm-up removal (default: 4 seconds)
 * Baseline drift removal
 * Signal normalization
 
-### 🔹 Motion Artifact Detection
+#### Motion Artifact Detection
 
 * Based on IMU (acc + gyro)
 * Rolling standard deviation
 * Threshold-based detection
 * Removes contaminated R-peaks
 
-### 🔹 HRV Metrics
+#### HRV Metrics
 
 | Metric          | Description                        |
 | --------------- | ---------------------------------- |
@@ -234,7 +234,7 @@ Place all `.bin` files in the project directory (or update `DATA_DIR`).
 
 ---
 
-## 😰 Stress Score Model
+### Stress Score Model
 
 A simple HRV-based stress proxy:
 
@@ -246,13 +246,13 @@ Low RMSSD (~10 ms)  → High stress (~100)
 High RMSSD (~100 ms) → Low stress (~0)
 ```
 
-> ⚠️ This is a heuristic model, not a clinical metric.
+> This is a heuristic model, not a clinical metric.
 
 ---
 
-## 📊 Output
+### Output
 
-### 1. CSV File
+#### 1. CSV File
 
 ```
 HR_HRV_stress_summary_by_participant.csv
@@ -267,7 +267,7 @@ Contains:
 
 ---
 
-### 2. Statistical Analysis
+#### 2. Statistical Analysis
 
 ANOVA tests:
 
@@ -280,9 +280,9 @@ Stress_Score ~ condition
 
 ---
 
-### 3. Visualizations
+#### 3. Visualizations
 
-* 📊 Bar plots (mean ± SD)
+* Bar plots (mean ± SD)
 
   * Mean HR
   * Max HR increase
@@ -290,14 +290,14 @@ Stress_Score ~ condition
   * RMSSD
   * Stress score
 
-* 📉 Scatter plot:
+* Scatter plot:
 
   * RMSSD vs Stress Score
   * Demonstrates HRV–stress relationship
 
 ---
 
-## 🔧 Configuration
+### Configuration
 
 Modify parameters in the script:
 
@@ -317,7 +317,7 @@ gyr_factor = 2.0
 
 ---
 
-## ⚠️ Limitations
+### Limitations
 
 * Requires sufficient R-peaks for HRV calculation
 * Motion detection is threshold-based (not ML-based)
@@ -326,16 +326,7 @@ gyr_factor = 2.0
 
 ---
 
-## 🙌 Acknowledgments
+### Acknowledgments
 
 * [`biopsykit`](https://github.com/mad-lab-fau/biopsykit)
 * Scientific Python ecosystem (NumPy, SciPy, Statsmodels)
-
----
-
-
-## Notes
-
-* All File paths are relative
-* Run the script from the project root
-* Output folders are created automatically
